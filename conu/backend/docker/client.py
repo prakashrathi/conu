@@ -19,6 +19,8 @@ singleton instance of docker.APIClient
 """
 from __future__ import print_function, unicode_literals
 
+import os
+
 from conu.utils import check_docker_command_works
 
 import docker
@@ -34,7 +36,7 @@ def get_client():
         #        and check only once
         check_docker_command_works()
         try:
-            client = docker.APIClient(version="auto")  # >= 2
+            client = docker.APIClient(base_url=os.environ.get("DOCKER_HOST"), version="auto")  # >= 2
         except AttributeError:
-            client = docker.Client(version="auto")  # < 2
+            client = docker.Client(base_url=os.environ.get("DOCKER_HOST"), version="auto")  # < 2
     return client
